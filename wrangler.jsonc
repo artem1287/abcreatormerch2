@@ -1,0 +1,10 @@
+{
+  // Static-assets-only Worker for the AB Creator Merch site.
+  // `npx wrangler deploy` uploads everything in ./ and serves it as a static site.
+  "name": "abcreatormerch3",
+  "compatibility_date": "2025-06-01",
+  "assets": {
+    "directory": "./",
+    "not_found_handling": "single-page-application"
+  }
+}
