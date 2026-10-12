@@ -99,8 +99,9 @@ if (channelFormEl){
   });
 }
 
-/* ===== sync the 3 design tiles with the first 3 images in the sheet ===== */
+/* ===== sync the 3 design tiles with the first 3 images in column E of the sheet ===== */
 const SHEET_ID = "1cueUnlwC3t7wtnW-LLcy8zhPRxu36pDh6gBA1kfft1o";
+const DESIGN_COL = 4;   // column E ("design images")
 const designTiles = document.querySelectorAll(".design-tile");
 let lastDesignsSig = "";
 
@@ -116,7 +117,7 @@ function fetchSheet(){
     try {
       const rows = (resp.table && resp.table.rows) || [];
       const imgs = rows
-        .map(r => r.c && r.c[0] && r.c[0].v)
+        .map(r => r.c && r.c[DESIGN_COL] && r.c[DESIGN_COL].v)
         .filter(v => v != null && String(v).trim() !== "")
         .map(String)
         .slice(0, 3);
