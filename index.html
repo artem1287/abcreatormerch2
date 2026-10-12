@@ -72,12 +72,13 @@ img{ max-width:100%; display:block; }
   line-height:1.01;
   margin:0 auto clamp(6px,1vw,14px);
   max-width:15ch;
+  position:relative; z-index:4;   /* paint over the (white) top of the raised mug image */
 }
-/* media box keeps the original height so the green section never moves;
-   the enlarged mug (1.5x) overflows this box downward and the green overlaps it */
-.hero__media{ position:relative; height:clamp(360px, 48vw, 660px); }
+/* media box height sets where the green section begins (~950px at 1920 wide);
+   the enlarged mug (1.5x) overflows this box and the green overlaps its base */
+.hero__media{ position:relative; height:clamp(340px, 46vw, 629px); }
 .hero__imgwrap{
-  position:absolute; top:0; left:0; right:0;
+  position:absolute; top:clamp(-120px, -6.25vw, 0px); left:0; right:0;
   transform-origin:top center;
   transition:transform 2.5s cubic-bezier(.22,.61,.36,1);
   will-change:transform;
