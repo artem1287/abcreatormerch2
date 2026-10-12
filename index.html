@@ -78,15 +78,15 @@ img{ max-width:100%; display:block; }
    the enlarged mug (1.5x) overflows this box and the green overlaps its base */
 .hero__media{ position:relative; height:clamp(340px, 46vw, 629px); }
 .hero__imgwrap{
-  position:absolute; top:clamp(-120px, -6.25vw, 0px); left:0; right:0;
+  position:absolute; top:clamp(-300px, -14.4vw, 0px); left:0; right:0;
   transform-origin:top center;
-  transition:transform 2.5s cubic-bezier(.22,.61,.36,1);
+  transition:transform 1.3s cubic-bezier(.22,.61,.36,1);
   will-change:transform;
 }
 .hero__img{
   display:block; margin:0 auto;
-  height:calc(clamp(360px, 48vw, 660px) * 1.5); width:auto; max-width:none;
-  opacity:1; transition:opacity 1s ease;
+  height:calc(clamp(360px, 48vw, 660px) * 2.25); width:auto; max-width:none;
+  opacity:1; transition:opacity 1.3s ease;
 }
 .hero__cta{
   position:absolute; left:50%; top:0;
@@ -193,19 +193,14 @@ img{ max-width:100%; display:block; }
 .designs__grid::-webkit-scrollbar-track{ background:rgba(0,0,0,.08); border-radius:4px; }
 .designs__grid::-webkit-scrollbar-thumb{ background:rgba(0,0,0,.3); border-radius:4px; }
 
-/* ===== intro animation + scroll reveals ===== */
-.hero__imgwrap.intro{ transform:translateY(-6%) scale(1.12); }
-.hero__imgwrap.intro .hero__img{ opacity:0; animation:floaty 2.4s ease-in-out infinite; }
-.hero__imgwrap.intro.shown .hero__img{ opacity:1; }
-@keyframes floaty{ 0%,100%{ transform:translateY(0); } 50%{ transform:translateY(-2.6%); } }
-.hero__title, .hero__cta{ transition:opacity 1.6s ease; }
+/* ===== intro animation + scroll reveals =====
+   The mug starts slightly raised + invisible, then fades IN while it settles
+   into its final place in one motion (no fade-then-slide). */
+.hero__imgwrap.intro{ transform:translateY(-4%) scale(1.04); }
+.hero__imgwrap.intro .hero__img{ opacity:0; }
+.hero__title, .hero__cta{ transition:opacity 1.3s ease; }
 body.intro-playing .hero__title,
 body.intro-playing .hero__cta{ opacity:0; }
-/* if the viewer scrolls during the intro, let it resolve quickly */
-body.intro-fast .hero__imgwrap{ transition:transform .4s ease; }
-body.intro-fast .hero__img{ transition:opacity .3s ease; }
-body.intro-fast .hero__title,
-body.intro-fast .hero__cta{ transition:opacity .35s ease; }
 /* slower fade-ins everywhere else (scroll reveals) */
 .sr{ opacity:0; transition:opacity 2.4s cubic-bezier(.22,.61,.36,1); }
 .sr.in{ opacity:1; }
@@ -298,6 +293,6 @@ body.intro-fast .hero__cta{ transition:opacity .35s ease; }
   </div>
 </footer>
 
-<script src="script.js?v=12" defer></script>
+<script src="script.js?v=14" defer></script>
 </body>
 </html>

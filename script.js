@@ -4,26 +4,20 @@ const heroWrap = document.getElementById("heroImgWrap");
 
 if (heroWrap && !prefersReduced){
   document.body.classList.add("intro-playing");   // hides heading + CTA
-  heroWrap.classList.add("intro");
+  heroWrap.classList.add("intro");                // raised + invisible start state
 
-  let introDone = false, settleT;
-  function endIntro(fast){
-    if (introDone) return;
-    introDone = true;
-    clearTimeout(settleT);
-    window.removeEventListener("scroll", onScroll);
-    if (fast) document.body.classList.add("intro-fast");  // snap it into place quickly
+  // once the start state is painted, release everything at once: the mug fades
+  // in while it settles into its final place (no later slide). rAF triggers it
+  // on the first paint; the timeout is a fallback if rAF is throttled at load.
+  let released = false;
+  const release = () => {
+    if (released) return;
+    released = true;
     heroWrap.classList.remove("intro");
     document.body.classList.remove("intro-playing");
-  }
-  // if the viewer scrolls during the intro, let it fade away fast instead of waiting
-  function onScroll(){ if (window.scrollY > 4) endIntro(true); }
-
-  // 1) fade the mug in while it floats on its own
-  requestAnimationFrame(() => requestAnimationFrame(() => heroWrap.classList.add("shown")));
-  // 2) after ~1.25s float (half the previous hover), settle it into place and reveal the heading + CTA
-  settleT = setTimeout(() => endIntro(false), 1250);
-  window.addEventListener("scroll", onScroll, { passive: true });
+  };
+  requestAnimationFrame(() => requestAnimationFrame(release));
+  setTimeout(release, 120);
 }
 
 /* every CTA smooth-scrolls to the channel-link form */
