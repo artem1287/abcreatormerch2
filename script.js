@@ -44,8 +44,8 @@ if (!prefersReduced && "IntersectionObserver" in window){
   srEls.forEach(el => el.classList.add("in"));
 }
 
-/* ===== channel-link form: send the submitted @ to abcreatormerch@gmail.com ===== */
-const MERCH_EMAIL = "abcreatormerch@gmail.com";
+/* ===== channel-link form: send the submitted @ to abcreatorsmerch@gmail.com ===== */
+const MERCH_EMAIL = "abcreatorsmerch@gmail.com";
 const channelFormEl = document.getElementById("channelFormEl");
 const channelSubmit = document.getElementById("channelSubmit");
 const channelStatus = document.getElementById("channelStatus");
