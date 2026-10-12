@@ -1,31 +1,29 @@
-/* ===== hero intro animation + scroll reveals ===== */
+/* ===== scroll reveals ===== (the hero intro is now pure CSS, no JS needed) */
 const prefersReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-const heroWrap = document.getElementById("heroImgWrap");
 
-if (heroWrap && !prefersReduced){
-  document.body.classList.add("intro-playing");   // hides heading + CTA
-  heroWrap.classList.add("intro");                // raised + invisible start state
-
-  // once the start state is painted, release everything at once: the mug fades
-  // in while it settles into its final place (no later slide). rAF triggers it
-  // on the first paint; the timeout is a fallback if rAF is throttled at load.
-  let released = false;
-  const release = () => {
-    if (released) return;
-    released = true;
-    heroWrap.classList.remove("intro");
-    document.body.classList.remove("intro-playing");
-  };
-  requestAnimationFrame(() => requestAnimationFrame(release));
-  setTimeout(release, 120);
-}
-
-/* every CTA smooth-scrolls to the channel-link form */
+/* every CTA scrolls to the channel-link form.
+   We animate the scroll ourselves instead of relying on native smooth scroll,
+   which silently no-ops on some pages (e.g. when the body is a scroll container). */
 const sendSection = document.getElementById("sendSection");
 const channelInput = document.getElementById("channelInput");
+
+function smoothScrollTo(toY, duration){
+  const startY = window.pageYOffset;
+  const dist = toY - startY;
+  if (prefersReduced || Math.abs(dist) < 2){ window.scrollTo(0, toY); return; }
+  const startT = performance.now();
+  const ease = t => (t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2); // easeInOutQuad
+  (function step(now){
+    const p = Math.min(1, (now - startT) / duration);
+    window.scrollTo(0, startY + dist * ease(p));
+    if (p < 1) requestAnimationFrame(step);
+  })(startT);
+}
 function scrollToForm(){
-  sendSection.scrollIntoView({ behavior: "smooth", block: "start" });
-  if (channelInput) setTimeout(() => channelInput.focus({ preventScroll: true }), 550);
+  if (!sendSection) return;
+  const targetY = sendSection.getBoundingClientRect().top + window.pageYOffset;
+  smoothScrollTo(targetY, 600);
+  if (channelInput) setTimeout(() => channelInput.focus({ preventScroll: true }), 650);
 }
 document.querySelectorAll(".js-cta").forEach(el => {
   el.addEventListener("click", e => { e.preventDefault(); scrollToForm(); });

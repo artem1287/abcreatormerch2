@@ -27,7 +27,7 @@ body{
   color:rgba(0,0,0,.95);
   font-family:"Inter", system-ui, sans-serif;
   -webkit-font-smoothing:antialiased;
-  overflow-x:hidden;
+  overflow-x:clip;   /* clip (not hidden) so the body stays a non-scroll container and smooth scrolling keeps working */
 }
 img{ max-width:100%; display:block; }
 .wrap{ width:100%; max-width:1320px; margin:0 auto; padding:0 clamp(20px,5vw,72px); }
@@ -94,6 +94,8 @@ img{ max-width:100%; display:block; }
   position:absolute; left:50%; top:0;
   transform:translateX(-50%); z-index:3;
 }
+/* keep the horizontal centering on press (otherwise .btn:active drops the -50% and the button jumps right) */
+.hero__cta:active{ transform:translateX(-50%) translateY(2px); }
 
 /* ===== why (green) ===== */
 .why{ background:#055B43; padding:clamp(48px,6vw,88px) 0; position:relative; z-index:1; }
@@ -195,22 +197,24 @@ img{ max-width:100%; display:block; }
 .designs__grid::-webkit-scrollbar-track{ background:rgba(0,0,0,.08); border-radius:4px; }
 .designs__grid::-webkit-scrollbar-thumb{ background:rgba(0,0,0,.3); border-radius:4px; }
 
-/* ===== intro animation + scroll reveals =====
-   The mug starts slightly raised + invisible, then fades IN while it settles
-   into its final place in one motion (no fade-then-slide). */
-.hero__imgwrap.intro{ transform:translateY(-4%) scale(1.04); }
-.hero__imgwrap.intro .hero__img{ opacity:0; }
-.hero__title, .hero__cta{ transition:opacity 1.3s ease; }
-body.intro-playing .hero__title,
-body.intro-playing .hero__cta{ opacity:0; }
+/* ===== hero intro (pure CSS — runs on load, no JS timing dependency) =====
+   The title, CTA and mug fade in; the mug also settles up -> into place
+   in the same motion. */
+@keyframes heroFade{ from{ opacity:0; } to{ opacity:1; } }
+@keyframes mugSettle{ from{ transform:translateY(-4%) scale(1.04); } to{ transform:none; } }
+.hero__title{ animation:heroFade 1.3s ease both; }
+.hero__cta{ animation:heroFade 1.3s ease both; }
+.hero__img{ animation:heroFade 1.3s ease both; }
+.hero__imgwrap{ animation:mugSettle 1.3s cubic-bezier(.22,.61,.36,1) both; }
 /* slower fade-ins everywhere else (scroll reveals) */
 .sr{ opacity:0; transition:opacity 2.4s cubic-bezier(.22,.61,.36,1); }
 .sr.in{ opacity:1; }
 
 @media (prefers-reduced-motion: reduce){
-  .hero__imgwrap, .hero__imgwrap.intro{ transform:none; transition:none; }
+  .hero__imgwrap{ transform:none; animation:none; }
   .hero__img{ opacity:1 !important; animation:none; }
-  .hero__title, .hero__cta, .sr{ opacity:1 !important; transition:none; }
+  .hero__title, .hero__cta{ opacity:1 !important; animation:none; }
+  .sr{ opacity:1 !important; transition:none; }
   html{ scroll-behavior:auto; }
 }
 </style>
@@ -295,6 +299,6 @@ body.intro-playing .hero__cta{ opacity:0; }
   </div>
 </footer>
 
-<script src="script.js?v=16" defer></script>
+<script src="script.js?v=17" defer></script>
 </body>
 </html>
