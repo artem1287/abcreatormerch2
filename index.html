@@ -85,7 +85,9 @@ img{ max-width:100%; display:block; }
 }
 .hero__img{
   display:block; margin:0 auto;
-  height:calc(clamp(360px, 48vw, 660px) * 2.25); width:auto; max-width:none;
+  /* scale with the viewport so the mug (~0.8x as wide as tall) never gets
+     clipped on narrow screens; capped at 1485px so desktop stays 2.25x */
+  height:clamp(340px, 77.5vw, 1485px); width:auto; max-width:none;
   opacity:1; transition:opacity 1.3s ease;
 }
 .hero__cta{
